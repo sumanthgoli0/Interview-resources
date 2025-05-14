@@ -1,0 +1,200 @@
+1. The PCBs are stored in the form of LinkedList in memory (kernel space).
+
+2. PCB(process control block) can also be called as process descriptor.
+
+3. PCB contains
+	Process id(pid) --- Every process has its unique process id.
+	Parent process id(ppid) --- Every process has parent process id.
+		ex: parent process id of ./a.out is terminal process id.
+		first process in Linux is init process ( it doesn't have any parent process).
+	File Descriptor Table (Fd table) --- Information of opened files.
+	Signal Disposition Table --- Info of behaviour of signals.
+	Page table --- Memory map for virtual and physical addresses.
+
+4. fork() system call returns 2 times (once in child, once in parent).
+	In child --- fork returns 0
+	In parent --- fork returns pid of child
+	
+	ex:
+		int id;
+		id=fork();
+		if(id==0)
+		{
+			//code belong to child
+		}
+		else
+		{
+			//code belong to parent
+		}
+
+5. After creating a child process.
+	Initially memory segments are shared by the parent and child but when you modify the values of global resource in either parent or child process the write-on-copy technique is applied just before modifying the values.
+	Separate PCB gets created for child some of the contents are copied from parent's PCB to child's PCB.
+
+6. If parent process terminates before child process then this process is known as orphan process.
+
+7. If child process terminates before parent process then exit codes are written to parent process.
+	exit code tells about successful or unsuccessful termination
+
+8. Another version of fork() is called as vfork().
+
+9. The difference b/w fork() and vfork() is there a write on copy technique in fork() where there is no write on copy technique in vfork(). In vfork() same memory segments are shared by 	child and parent (updated value).
+
+10. Paging technique is part of memory management subsystem.
+
+11. Address of variable which is printing is known as virtual address.(int x,a=10; x=&a) These virtual addresses are mapped to physical address using paging technique.
+
+12. All the memory segments(Text, data, BSS, heap, Stack) are divided into equal size of blocks. These blocks are called as virtual pages. Size of each block is 4kb(kilo bytes).
+
+13. Even RAM is divided into equal sized blocks of memory. These blocks are called as physical frames or page frames. Size of each block is 4kb.
+
+14. Whenever the process gets executed the memory segments(virtual pages) are copied to ram(physical frames) and these memory segments are stored randomly in ram. All these info where memory segments are stored in ram has stored in page table.
+
+15. Which virtual page is present in which physical frame this info present in page table.
+
+16. Some pages are loaded in physical frames others are stored in part of hard disk (swap area in linux, backing store in windows).
+
+17. In write on copy techinque the complete physical frame no copied to next freely available physical frame.
+
+18. How write on copy technique applied?
+	1. The particular physical frame no will be copied to next freely available physical frame.
+	2. Update the page table of the process who is writing to that variable.
+	3. Update the value of variable in new physical frame.
+
+19. Write on copy technique will applied only once.
+
+20. Exec family of calls are used to execute the shell commands(ls, cp, ps-ef) from the process.
+
+21. Execl, execv, execlp, execvp.
+
+22. Exec family of calls replaces the existing process image with a new process.
+
+23. execl(const char *path, const char *arg, ..., NULL);
+	ex: execl("/bin/ls", "ls", NULL);
+
+24. execv(const char *path, const char *argv[]);
+	ex: char *argv[]={"ls", "-l", NULL};
+	    execv("/bin/ls", argv);
+
+25. execlp(const char *file, const char *args, ..., NULL); file --> should contain predefined commands.
+	ex: execlp("ls", "ls", NULL);
+
+26. execvp(const char *file, const char *argv[]);
+	ex: char *argv[]={"ls", "-l", NULL};
+            execvp("ls", argv);
+
+27. The file management subsystem is responsible to handle file io operations.
+
+28. Basic io calls/ universal io calls(read, write, open, close, ioctl, fcntl) used in linux operating system, Library calls/ Standard io calls(fclose, fopen, fread, fwrite, fprintf, fscanf) used in c for all operating systems.
+
+29. Standard io calls operates on normal files(binary(a.out) and textual files(.txt, .java, .py, .c)) and basic io calls operates on normal and special files(ipc objects, device files).
+
+30. Open internally invokes sys_open in VFS(Virtual file system) layer. Different VFS in linux are /proc, /dev, /sys, /etc, /boot. and VFS do not exist on hard disk they are created when  	Linux boots up.
+
+31. Functionalities of sys_open
+	1. Creates kernel data structures.
+	2. Routes the call (normal file --> block driver(hard disk), special file --> character driver)
+
+32. Fd table entry contains address to file objects. file object is type of struct file. it contains mode, offset/cursor position, Private data, address to inode object.
+
+33. Through this file object we pointed to another object called as inode object. It contains name, size, permissions, username id, timestamps, *cdev. Inode object is type of struct inode and cdev is type of struct cdev.
+
+34. File object is created while opening the file and inode object is initially present with file in harddisk. Inode object is created at the time of creation of the file.
+
+35. When the file is opened the contents of inode object copied from hdd to ram.
+
+36. For normal files cdev object is empty.
+
+37. Failures of open system call
+	1. File doesn't exist
+	2. Permissions not there
+
+38. Permissions 0666	0 --> Octal format 		
+		        6 --> User		6 represented in binary 1 1 0	1 --> Read, 1 --> Write, 0 --> Execute						
+			6 --> group 
+			6 --> others/network users
+
+39. On success read system call returns no of bytes read. On failure read system call returns -1. Read can also return 0, when the file is empty or the contents in the file are already read. read is a blocking call when operated on fd's related to special files.
+	Conditions of blocking
+		1. Fd should be associated with special files.
+		2. Buffer should be empty.
+
+40. On success write system call returns no of bytes written. On failure write system call returns -1. 
+
+41. Stat() is used to read the contents of inode object present in hdd to user space of RAM and fstat() is used to read the contents of inode object present in kernel space of RAM to user space of RAM.
+	int stat(const char *file, struct stat *buf);
+	int fstat(int fd, struct stat *buf);
+
+42. Permissions can be changed in two ways
+	1. Shell commands (chmod) syntax: chmod permissions filename ex: chmod 0666 file.txt
+	2. System calls (chmod, fchmod) ex: chmod("file",0666), fchmod(fd, 0666);
+
+43. Scheduler is software component of operating system that schedules the execution of programs.
+44. The switching of CPU from one process to another process is known as context switching. All running processes are maintained as nodes in a LinkedList. There are 2 scheduling mechanisms(Base schedulers) 
+	1. Round robin
+	2. Preemptive priority
+
+45. In Round Robin,
+	Every process will get equal amount of time for execution.
+	When CPU time expires the CPU is given to the next process in LinkedList.
+
+	2 Reasons for context switching in RR
+	Process is blocked
+	CPU time has been expired
+	
+46. In preemptive priority,
+	CPU will be given to process which has highest priority to execute.
+	If any high priority task came CPU pauses the current process and executes the higher priority task this process is known as preemption.
+	Lower priority task is preempted by higher priority task.
+
+	Reason for context switching in preemptive priority
+	Higher priority task preempts the lower priority task	
+
+47. In ARM architecture processor we have 16 registers(R0 - R15). First 13 registers are known as general purpose registers and remaining 3 registers are known as special purpose registers.
+	R13 ---> Stack pointer (Stack pointer points to the top of the stack)
+	R14 ---> Link Register (Just before executing the functions definition the Address to the next instruction to the function call is stored in link register)
+	R15 ---> Program counter (holds the address of next coming instruction)
+The complete info which is stored from R0 to R15 is known as context information.
+
+48. In kernel we have two registers this area is present in PCB and called as context area
+	CPSR --> Current program status register
+	SPSR --> Saved program status register
+
+49. Just before context switching the contents of R0 to R15 are copied to saved program status register. After saving the current context info to context area the CPU is switched to next process.
+
+50. After switching to next process the saved context info of next process will be loaded to CPU registers R0 to R15.
+
+51. Signals are software events and signals are also called as software interrupts. Signal is an event generated by unique system in kernel to notify some condition. There are total of 64 signals in Linux system. Out of these we are using only 32 signals.
+
+52. How to view list of signals? kill -l
+
+53. Internally wait() uses pause() system call pause() is a blocking system call.
+
+54. Pause() is used to block until it receives any signal
+
+55. alarm() is a system call it accepts a single argument which is timeout in seconds. alarm() system call is used to generate SIGALARM() signal to own process after timeout.
+
+56. Threads are parallelly executing functions. Thread is also a function. Every process will have at least one thread that is main() function.
+
+57. Disadvantages of threads
+	synchronization issue
+	Global data corruption
+
+58. The section of code which tries to access the global data or global resource is known as critical section. Critical sections must not be accessed by multiple threads at the same time.
+
+59. To avoid synchronization issue between threads we use mutex locks. Mutex lock variable should be declared globally.
+
+60. By default mutex lock in unlocked state.
+
+61. The aim of ipc mechanisms to share data between multiple processes.
+	Ipc mechanisms are Pipes, Named pipes/Fifos, Message queues, shared memory.
+
+62. Pipes are used to share data between related processes. fd[0] --> reading descriptor, fd[1] --> writing descriptor.
+
+63. The process which is reading the kernel buffer should close write fd and the process which is writing the kernel buffer should close read fd.
+
+64. In fifos read and open are blocking calls.
+
+65. Server will start first, server will create fifo object, server opens the fifo object in read only mode.
+
+66. The client opens the same fifo object in opposite mode( rd or write). as soon as the client opens the fifo object in opposite mode it unblocks the fifo object in server.

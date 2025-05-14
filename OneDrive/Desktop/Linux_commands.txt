@@ -1,0 +1,52 @@
+*"50 Linux commands for our day-to-day work**
+
+1. ls - List directory contents.
+2. pwd - Display current directory path.
+3. cd - Change directory.
+4. mkdir - Create a new directory.
+5. mv - Move or rename files.
+6. cp - Copy files.
+7. rm - Delete files.
+8. touch - Create an empty file.
+9. rmdir - Remove directory.
+10. cat - Display file content.
+11. clear - Clear terminal screen.
+12. echo - Output text or data to a file.
+13. less - View text files page-by-page.
+14. man - Display command manual.
+15. sudo - Execute commands with root privileges.
+16. top - Show system processes.
+17. tar - Archive files into tarball.
+18. grep - Search for text within files.
+19. head - Display file's beginning lines.
+20. tail - Show file's ending lines.
+21. diff - Compare two files' content.
+22. kill - Terminate processes.
+23. jobs - List active jobs.
+24. sort - Sort lines of a text file.
+25. df - Display disk usage.
+26. du - Show file or directory size.
+27. zip - Compress files into zip format.
+28. unzip - Extract zip archives.
+29. ssh - Secure connection between hosts.
+30. cal - Display calendar.
+31. apt - Manage packages.
+32. alias - Create command shortcuts.
+33. w - Show current user details.
+34. whereis - Locate binaries, sources, and manuals.
+35. whatis - Provide command description.
+36. useradd - Add a new user.
+37. passwd - Change user password.
+38. whoami - Display current user name.
+39. uptime - Show system runtime.
+40. free - Display memory status.
+41. history - List command history.
+42. uname - Provide system details.
+43. ping - Check network connectivity.
+44. chmod - Modify file/directory permissions.
+45. chown - Change file/directory owner.
+46. find - Search for files/directories.
+47. locate - Find files quickly.
+48. ifconfig - Display network interfaces.
+49. ip a - List network interfaces succinctly.
+50. finger - Retrieve user information.

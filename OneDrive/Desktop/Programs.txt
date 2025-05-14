@@ -1,0 +1,150 @@
+1. WAP to convert octal to decimal
+
+#include<stdio.h>
+#include<math.h>
+void main()
+{
+    int num,rem,result=0,j=0,base=8;
+    printf("Enter number in octal ");
+    scanf("%o",&num);
+    int temp=num;
+    while(num>0)
+    {
+        rem=num%10;
+        result=result+rem*pow(base,j);
+        num/=10;
+        j++;
+    }
+    printf("Decimal representation of %o is %d",temp,result);
+}
+
+2. WAP to print LCM of two numbers
+
+#include<stdio.h>
+void main()
+{
+    int num1,num2,i,max,lcm=1;
+    printf("Enter first number ");
+    scanf("%d",&num1);
+    printf("Enter second number ");
+    scanf("%d",&num2);
+    max=(num1>num2)?num1:num2;
+    for(i=max;i<=num1*num2;i++)
+    {
+        if(i%num1==0&&i%num2==0)
+        {
+            lcm=i;
+            break;
+        }
+    }
+    printf("LCM of %d and %d is %d\n",num1,num2,lcm);
+}
+
+3. WAP to convert hexadecimal to decimal
+
+#include<stdio.h>
+#include<math.h>
+#include<string.h>
+void main()
+{
+    char hex[32];
+    int result=0,i=0,j=0,rem=0,base=16;
+    printf("Enter a number in hexadecimal format ");
+    scanf("%s",hex);
+    int len=strlen(hex);
+    for(i=len-1;i>=0;i--)
+    {
+        if(hex[i]>='0'&&hex[i]<='9')
+        {
+            result=result+(hex[i]-'0')*pow(base,j);
+        }
+        else if(hex[i]>='A'&&hex[i]<='F')
+        {
+            result=result+(hex[i]-'A'+10)*pow(base,j);
+        }
+        else if(hex[i]>='a'&&hex[i]<='f')
+        {
+            result=result+(hex[i]-'a'+10)*pow(base,j);
+        }
+        j++;
+    }
+    printf("Decimal conversion of %s is %d\n",hex,result);
+}
+
+4. WAP to convert decimal to binary
+
+#include<stdio.h>
+void main()
+{
+    int num,rem=0,i=0;
+    int bin[32];
+    printf("Enter a number in decimal formant ");
+    scanf("%d",&num);
+    int temp=num;
+    while(num>0)
+    {
+        rem=num%2;
+        bin[i]=rem;
+        num/=2;
+        i++;
+    }
+    printf("Binary conversion of %d is ",temp);
+    for(int j=i-1;j>=0;j--)
+    {
+        printf("%d",bin[j]);
+    }
+}
+
+5. WAP to convert decimal to octal
+
+#include<stdio.h>
+void main()
+{
+    int num,i=0,octal[32],rem;
+    printf("Enter a number in decimal format ");
+    scanf("%d",&num);
+    int temp=num;
+    while(num>0)
+    {
+        rem=num%8;
+        octal[i]=rem;
+        i++;
+        num/=8;
+    }
+    printf("Octal representation of %d is ",temp);
+    for(int j=i-1;j>=0;j--)
+    {
+        printf("%d",octal[j]);
+    }
+}
+
+6. WAP to convert decimal to hexadecimal
+
+#include<stdio.h>
+void main()
+{
+    int num,hex[32],i=0,temp,rem;
+    printf("Enter a number in decimal format ");
+    scanf("%d",&num);
+    temp=num;
+    while(num>0)
+    {
+        rem=num%16;
+        if(rem<=9)
+        {
+            hex[i]=rem+48;
+        }
+        else
+        {
+            hex[i]=rem+55;
+        }
+        i++;
+        num/=16;
+    }
+    printf("Hexadecimal format of %d is ",temp);
+    for(int j=i-1;j>=0;j--)
+    {
+        printf("%c",hex[j]);
+    }
+}
+
